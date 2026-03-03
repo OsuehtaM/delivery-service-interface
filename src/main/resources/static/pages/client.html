@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client</title>
+    <script src="/script.js" defer></script>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://kit.fontawesome.com/1182a87b13.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <h1 id="logo">Delivery Service</h1>
+        <nav>
+            <ul>
+                <li><a href="/pages/client.html">Client</a></li>
+                <li><a href="/pages/driver.html">Driver</a></li>
+                <li><a href="/pages/order.html">Order</a></li>
+                <li><a href="/pages/delivery.html">Delivery</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+
+        <section id="main-content">
+            <h2>Clients</h2>
+            <div id="client-list">
+            </div>
+        </section>
+
+        <dialog id="update-modal">
+            <h2 class="modal-title">Edit Client</h2>
+            <form id="edit-form">
+                <label for="name">Name</label>
+                <input type="text" id="editName" name="name" required>
+
+                <label for="cpfCnpj">CPF / CNPJ</label>
+                <input type="text" id="editCpfCnpj" name="cpfCnpj" placeholder="12345678910" required>
+
+                <label for="address">Address</label>
+                <input type="text" id="editAddress" name="address" placeholder="Exemple Street">
+
+                <label for="city">City</label>
+                <input type="text" id="editCity" name="city">
+
+                <label for="state">State</label>
+                <input type="text" id="editState" name="state" maxlength="2" placeholder="CA">
+
+                <button class=submit-button type="submit">Edit</button>
+                <button class="cancel-button" type="button">Cancel</button>
+            </form>
+            
+        </dialog>
+
+        <button id="register">Register new Client</button>
+
+        <dialog id="register-modal">
+            <h2 class="modal-title">Register Client</h2>
+            <form id="register-form">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="cpfCnpj">CPF / CNPJ</label>
+                <input type="text" id="cpfCnpj" name="cpfCnpj" placeholder="12345678910" required>
+
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" placeholder="Exemple Street">
+
+                <label for="city">City</label>
+                <input type="text" id="city" name="city">
+
+                <label for="state">State</label>
+                <input type="text" id="state" name="state" maxlength="2" placeholder="CA">
+
+                <button class=submit-button type="submit">Register</button>
+                <button class="cancel-button" type="button">Cancel</button>
+            </form>
+        </dialog>
+    </main>
+    
+</body>
+</html>
