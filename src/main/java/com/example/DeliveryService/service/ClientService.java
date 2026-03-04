@@ -21,6 +21,10 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
+    public List<Client> findAllByIdOrderAsc() {
+        return clientRepository.findAllByOrderByIdAsc();
+    }
+
     // Get clients by id, "findById" is used 'cause can return an exception to be handled
     public Client findById(Long id){
         return clientRepository.findById(id)

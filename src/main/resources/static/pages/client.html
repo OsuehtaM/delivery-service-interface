@@ -32,25 +32,39 @@
         <dialog id="update-modal">
             <h2 class="modal-title">Edit Client</h2>
             <form id="edit-form">
+                <input type="hidden" id="editId" name="id">
+
                 <label for="name">Name</label>
                 <input type="text" id="editName" name="name" required>
 
                 <label for="cpfCnpj">CPF / CNPJ</label>
-                <input type="text" id="editCpfCnpj" name="cpfCnpj" placeholder="12345678910" required>
+                <input type="text" id="editCpfCnpj" name="cpfCnpj" required>
 
                 <label for="address">Address</label>
-                <input type="text" id="editAddress" name="address" placeholder="Exemple Street">
+                <input type="text" id="editAddress" name="address" required>
 
                 <label for="city">City</label>
-                <input type="text" id="editCity" name="city">
+                <input type="text" id="editCity" name="city" required>
 
                 <label for="state">State</label>
-                <input type="text" id="editState" name="state" maxlength="2" placeholder="CA">
+                <input type="text" id="editState" name="state" maxlength="2" required>
 
-                <button class=submit-button type="submit">Edit</button>
+                <button id="edit-button" type="submit">Edit</button>
                 <button class="cancel-button" type="button">Cancel</button>
             </form>
-            
+        </dialog>
+
+        <dialog id="delete-modal">
+            <h2 class="modal-title">Delete Client</h2>
+            <p id="delete-instruction">Insert the name of the client to delete it</p>
+            <form id="delete-form">
+                <input type="hidden" id="deleteId" name="id">
+
+                <input type="text" id="deleteName" name="name" required>
+
+                <button id="delete-button" type="submit">Delete</button>
+                <button class="cancel-button" type="button">Cancel</button>
+            </form>
         </dialog>
 
         <button id="register">Register new Client</button>
@@ -65,15 +79,15 @@
                 <input type="text" id="cpfCnpj" name="cpfCnpj" placeholder="12345678910" required>
 
                 <label for="address">Address</label>
-                <input type="text" id="address" name="address" placeholder="Exemple Street">
+                <input type="text" id="address" name="address" placeholder="Exemple Street" required>
 
                 <label for="city">City</label>
-                <input type="text" id="city" name="city">
+                <input type="text" id="city" name="city" required>
 
                 <label for="state">State</label>
-                <input type="text" id="state" name="state" maxlength="2" placeholder="CA">
+                <input type="text" id="state" name="state" maxlength="2" placeholder="CA" required>
 
-                <button class=submit-button type="submit">Register</button>
+                <button id="register-button" type="submit">Register</button>
                 <button class="cancel-button" type="button">Cancel</button>
             </form>
         </dialog>

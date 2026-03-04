@@ -4,8 +4,7 @@ form {
     gap: 1rem;
 }
 
-#register-modal {
-
+dialog {
     width: 30vw;
     padding: 2rem;
 }

@@ -2,6 +2,8 @@ package com.example.DeliveryService.controller;
 
 import com.example.DeliveryService.model.Client;
 import com.example.DeliveryService.service.ClientService;
+import jakarta.websocket.server.PathParam;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public class ClientController {
 
     @GetMapping
     public List<Client> getAll () {
-        return clientService.findAll();
+        return clientService.findAllByIdOrderAsc();
     }
 
     //Passes the id after the "/" ,through the path, this is called "PathVariable"
@@ -36,6 +38,7 @@ public class ClientController {
     @PutMapping("/{id}")
     public Client update (@PathVariable Long id, @RequestBody Client clientDetails){
         Client client = clientService.findById(id);
+
         client.setName(clientDetails.getName());
         client.setCpfCnpj(clientDetails.getCpfCnpj());
         client.setAddress(clientDetails.getAddress());
@@ -44,8 +47,15 @@ public class ClientController {
         return clientService.save(client);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete (@PathVariable Long id){
-        clientService.delete(id);
+    @DeleteMapping("/{id}?nameVerification={name}")
+    public void delete (@PathVariable Long id, @RequestParam String name){
+        Client client = clientService.findById(id);
+
+        if (client.getName().equalsIgnoreCase(name)){
+            clientService.delete(id);
+        }else{
+            ResponseEntity.badRequest();
+        }
+
     }
 }

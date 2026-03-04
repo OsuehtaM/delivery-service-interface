@@ -11,8 +11,8 @@ async function createClient(payload) {
     });
 
     if (!response.ok) {
-        const error = await response.json().catch(() => ({ message: "Erro desconhecido" }));
-        throw new Error(error.message || "Falha na requisição");
+        const error = await response.json().catch(() => ({ message: "Unknown error" }));
+        throw new Error(error.message || "Request failure");
     }
 
     return await response.json();
@@ -59,13 +59,14 @@ async function readClient(id){
     const client = await response.json();
 
     if (!response.ok){
-        const error = await response.json().catch(() => ({message: "Erro desconhico"}));
-        throw new Error(error.message || "Falha na requisição")
+        const error = await response.json().catch(() => ({message: "Unknown error"}));
+        throw new Error(error.message || "Request failure")
     }
     return client
 }
 
 function updateEditModal(client) {
+    document.getElementById('editId').value = client.id;
     document.getElementById('editName').value = client.name;
     document.getElementById('editCpfCnpj').value = client.cpfCnpj;
     document.getElementById('editAddress').value = client.address;
@@ -73,18 +74,34 @@ function updateEditModal(client) {
     document.getElementById('editState').value = client.state;
 }
 
-async function updateClient(payload) {
-    const response = await fetch (`${API_BASE_URL}/client`, {
+async function updateClient(payload, id) {
+    const response = await fetch (`${API_BASE_URL}/client/${id}`, {
         method: 'PUT',
         headers: {'Content-Type' : 'application/json'},
         body: JSON.stringify(payload)
     });
 
     if (!response.ok) {
-        const error = await response.json().catch(() => ({ message: "Erro desconhecido"}));
-        throw new Error(error.message || "Falha na requisição");
+        const error = await response.json().catch(() => ({ message: "Unknown error"}));
+        throw new Error(error.message || "Request failure");
     }
-    
+
+    return await response.json();
+}
+
+function updateDeleteModal (client) {
+    document.getElementById('deleteId').value = client.id;
+}
+
+async function deleteClient(name, id) {
+    const response = await fetch (`${API_BASE_URL}/client/${id}?nameVerification=${name}`, {
+        method: 'DELETE'
+    });
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({ message: "Unknown error"}));
+        throw new Error(error.message || "Request failure")
+    } 
 }
 
 // --- 3. UI HANDLERS (Manipulação da Tela) ---
@@ -95,7 +112,7 @@ function setupEventListeners() {
     const modal = document.querySelector("#register-modal");
 
     document.querySelector("#register").onclick = () => modal.showModal();
-    document.querySelector("#cancel-button").onclick = () => modal.close();
+    document.querySelector("#register-modal .cancel-button").onclick = () => modal.close();
 
     
     // Envio do Formulário
@@ -123,24 +140,36 @@ function setupEventListeners() {
     // Load Clients
     loadClients();
     
-    // Update Client
+    // Click on Option for Client
+    document.getElementById('client-list').addEventListener('click', async (event) => {
 
-    document.getElementById('client-list').addEventListener('click', (event) => {
+        if (event.target.closest(".edit-client")) {
+            const button = event.target.closest(".edit-client")
 
-        if (event.target.classList.contains('edit-client')) {
             const editModal = document.querySelector("#update-modal");
-
-            const client = readClient(event.target.dataset.id);
+            const client = await readClient(button.dataset.id);
+            document.querySelector("#update-modal .cancel-button").onclick = () => editModal.close();
 
             updateEditModal(client);
 
             editModal.showModal();
 
+        }else if (event.target.closest(".delete-client")){
+            const button = event.target.closest(".delete-client")
+
+            const deleteModal = document.querySelector("#delete-modal");
+            const client = await readClient(button.dataset.id);
+            document.querySelector("#delete-modal .cancel-button").onclick = () => deleteModal.close();
+
+            updateDeleteModal(client);
+
+            deleteModal.showModal();
         }
     })
 
+    // Send Update Client from modal
     const editForm = document.getElementById('edit-form');
-
+    
     editForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
@@ -148,10 +177,36 @@ function setupEventListeners() {
         const payload = Object.fromEntries(formData.entries());
 
         try {
-            const result = await updateClient(payload)
+            const result = await updateClient(payload, formData.get('id'))
+            alert (`Sucesso! Client ${result.name} salvo.`);
+
+            document.querySelector("#update-modal").close();
+            location.reload();
         }
-        catch{
-            
+        catch(error){
+            console.error("Erro no cadastro:", error);
+            alert(error.message);
+        }
+    })
+
+    // Send Delete Client from modal
+    const deleteForm = document.getElementById('delete-form');
+
+    deleteForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(deleteForm);
+
+        try {
+            await deleteClient(formData.get('name'), formData.get('id'))
+            alert("Success! Client removed!");
+
+            document.querySelector("#delete-modal").close();
+            location.reload();
+        }
+        catch(error){
+            console.error("Delete Error", error);
+            alert(error.message);
         }
     })
 }
